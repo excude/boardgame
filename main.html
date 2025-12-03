@@ -49,17 +49,41 @@
                                                                                                 let attendees = [];
 
                                                                                                 async function saveGameSettings() {
-                                                                                                  gameName = document.getElementById("gameName").value;
-                                                                                                    maxPlayers = parseInt(document.getElementById("maxPlayers").value);
+  gameName = document.getElementById("gameName").value;
+  maxPlayers = parseInt(document.getElementById("maxPlayers").value);
 
-                                                                                                      const res = await fetch(API_URL + "?mode=save_settings", {
-                                                                                                          method: "POST",
-                                                                                                              body: JSON.stringify({ gameName, maxPlayers })
-                                                                                                                });
+  const res = await fetch(API_URL + "?mode=save_settings", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ gameName, maxPlayers })
+  });
 
-                                                                                                                  alert("저장 완료!");
-                                                                                                                    loadData();
-                                                                                                                    }
+  alert("저장 완료!");
+  loadData();
+}
+
+async function attend() {
+  const idInput = document.getElementById("userId");
+  let userId = idInput.value.trim();
+
+  if (!userId) {
+    alert("아이디를 입력하세요.");
+    return;
+  }
+
+  const res = await fetch(API_URL + "?mode=attend", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId })
+  });
+
+  const data = await res.json();
+  if (!data.success) {
+    alert(data.message);
+  }
+
+  loadData();
+}
 
                                                                                                                     async function attend() {
                                                                                                                       const idInput = document.getElementById("userId");
